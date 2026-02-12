@@ -40,9 +40,23 @@ export default function HomeScreen() {
       <View style={[styles.header, { paddingTop: Math.max(8, insets.top) }]}>
         <View style={styles.headerTop}>
           <Text style={styles.logo}>KG Market</Text>
-          <Pressable>
-            <MaterialIcons name="notifications-none" size={24} color={colors.text} />
-          </Pressable>
+          <View style={styles.headerIcons}>
+            <Pressable
+              style={styles.iconButton}
+              onPress={() => router.push('/favorites')}
+            >
+              <MaterialIcons name="favorite-border" size={24} color={colors.text} />
+            </Pressable>
+            <Pressable
+              style={styles.iconButton}
+              onPress={() => router.push('/cart')}
+            >
+              <MaterialIcons name="shopping-cart" size={24} color={colors.text} />
+            </Pressable>
+            <Pressable style={styles.iconButton}>
+              <MaterialIcons name="notifications-none" size={24} color={colors.text} />
+            </Pressable>
+          </View>
         </View>
         <SearchBar
           value={searchQuery}
@@ -128,6 +142,14 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
     color: colors.primary,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  iconButton: {
+    padding: spacing.xs,
   },
   content: {
     flex: 1,

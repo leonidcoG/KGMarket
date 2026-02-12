@@ -90,19 +90,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="favorites"
         options={{
-          title: 'Избранное',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="favorite" size={size} color={color} />
-          ),
+          href: null,
         }}
       />
       <Tabs.Screen
         name="cart"
         options={{
-          title: 'Корзина',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="shopping-cart" size={size} color={color} />
-          ),
+          href: null,
         }}
       />
     </Tabs>

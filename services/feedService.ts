@@ -10,7 +10,7 @@ export const getFeedItems = (): FeedItem[] => {
       id: '1',
       type: 'video',
       mediaUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400',
+      thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&auto=format&fit=crop',
       product: {
         id: '1',
         name: 'Стильная куртка',
@@ -19,7 +19,7 @@ export const getFeedItems = (): FeedItem[] => {
       },
       author: {
         name: 'Модный блогер',
-        avatar: 'https://i.pravatar.cc/150?img=1',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop',
       },
       likes: 1234,
       comments: 89,
@@ -28,7 +28,7 @@ export const getFeedItems = (): FeedItem[] => {
     {
       id: '2',
       type: 'image',
-      mediaUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800',
+      mediaUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop',
       product: {
         id: '2',
         name: 'Модные кроссовки',
@@ -37,7 +37,7 @@ export const getFeedItems = (): FeedItem[] => {
       },
       author: {
         name: 'Стиль Бишкек',
-        avatar: 'https://i.pravatar.cc/150?img=2',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop',
       },
       likes: 2456,
       comments: 156,
@@ -47,7 +47,7 @@ export const getFeedItems = (): FeedItem[] => {
       id: '3',
       type: 'video',
       mediaUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-      thumbnail: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400',
+      thumbnail: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&auto=format&fit=crop',
       product: {
         id: '3',
         name: 'Платье вечернее',
@@ -56,11 +56,47 @@ export const getFeedItems = (): FeedItem[] => {
       },
       author: {
         name: 'Fashion KG',
-        avatar: 'https://i.pravatar.cc/150?img=3',
+        avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop',
       },
       likes: 3421,
       comments: 234,
       shares: 123,
+    },
+    {
+      id: '4',
+      type: 'image',
+      mediaUrl: 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=800&auto=format&fit=crop',
+      product: {
+        id: '4',
+        name: 'Сумка кожаная',
+        price: 2800,
+        brand: 'Leather Co',
+      },
+      author: {
+        name: 'Аксессуары KG',
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop',
+      },
+      likes: 1890,
+      comments: 92,
+      shares: 34,
+    },
+    {
+      id: '5',
+      type: 'image',
+      mediaUrl: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop',
+      product: {
+        id: '5',
+        name: 'Джинсы классические',
+        price: 3600,
+        brand: 'Denim Style',
+      },
+      author: {
+        name: 'Fashion Trends',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop',
+      },
+      likes: 2134,
+      comments: 145,
+      shares: 67,
     },
   ];
 };
