@@ -5,7 +5,7 @@
 export interface FeedItem {
   id: string;
   type: 'video' | 'image';
-  mediaUrl: string;
+  mediaUrl: any;
   thumbnail?: string;
   product: {
     id: string;

@@ -9,12 +9,12 @@ export const getFeedItems = (): FeedItem[] => {
     {
       id: '1',
       type: 'video',
-      mediaUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&auto=format&fit=crop',
+      mediaUrl: require('@/assets/coffe.mp4'),
+      thumbnail: 'https://i.pinimg.com/736x/33/c7/bf/33c7bf073f11851dd249e904fb7cbd38.jpg',
       product: {
         id: '1',
-        name: 'Стильная куртка',
-        price: 4500,
+        name: 'Утренний кофе',
+        price: 350,
         brand: 'Fashion Brand',
       },
       author: {
@@ -28,11 +28,12 @@ export const getFeedItems = (): FeedItem[] => {
     {
       id: '2',
       type: 'image',
-      mediaUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop',
+      mediaUrl: 'https://ya-modnaya.ru/_pu/6/90214064.jpg',
+      thumbnail: 'https://ya-modnaya.ru/_pu/6/90214064.jpg',
       product: {
         id: '2',
-        name: 'Модные кроссовки',
-        price: 3200,
+        name: 'Модный образ 2026',
+        price: 9800,
         brand: 'Sport Style',
       },
       author: {
@@ -45,13 +46,13 @@ export const getFeedItems = (): FeedItem[] => {
     },
     {
       id: '3',
-      type: 'video',
-      mediaUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-      thumbnail: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&auto=format&fit=crop',
+      type: 'image',
+      mediaUrl: 'https://i.pinimg.com/originals/ee/6e/25/ee6e25c50fe5a138ae9e85f0f1bdc752.jpg',
+      thumbnail: 'https://i.pinimg.com/originals/ee/6e/25/ee6e25c50fe5a138ae9e85f0f1bdc752.jpg',
       product: {
         id: '3',
-        name: 'Платье вечернее',
-        price: 5800,
+        name: 'Стильный костюм',
+        price: 11200,
         brand: 'Elegant',
       },
       author: {

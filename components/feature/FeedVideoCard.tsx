@@ -22,7 +22,7 @@ export const FeedVideoCard: React.FC<FeedVideoCardProps> = ({ item, isActive }) 
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(item.likes);
-  
+
   const player = item.type === 'video' ? useVideoPlayer(item.mediaUrl, (player) => {
     player.loop = true;
     player.muted = false;
@@ -61,9 +61,10 @@ export const FeedVideoCard: React.FC<FeedVideoCardProps> = ({ item, isActive }) 
         />
       ) : (
         <Image
-          source={{ uri: item.mediaUrl }}
+          source={typeof item.mediaUrl === 'string' ? { uri: item.mediaUrl } : item.mediaUrl}
           style={styles.media}
           contentFit="cover"
+          contentPosition="top"
           transition={200}
         />
       )}
@@ -71,10 +72,10 @@ export const FeedVideoCard: React.FC<FeedVideoCardProps> = ({ item, isActive }) 
       <View style={styles.overlay}>
         <View style={styles.sidebar}>
           <Pressable style={styles.sidebarButton} onPress={handleLike}>
-            <MaterialIcons 
-              name={isLiked ? "favorite" : "favorite-border"} 
-              size={32} 
-              color={isLiked ? colors.primary : colors.textOnPrimary} 
+            <MaterialIcons
+              name={isLiked ? "favorite" : "favorite-border"}
+              size={32}
+              color={isLiked ? colors.primary : colors.textOnPrimary}
             />
             <Text style={styles.sidebarText}>{likes}</Text>
           </Pressable>
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   sidebar: {
     position: 'absolute',
