@@ -8,13 +8,13 @@ export const getFeedItems = (): FeedItem[] => {
   return [
     {
       id: '1',
-      type: 'video',
-      mediaUrl: require('@/assets/coffe.mp4'),
-      thumbnail: 'https://i.pinimg.com/736x/33/c7/bf/33c7bf073f11851dd249e904fb7cbd38.jpg',
+      type: 'image',
+      mediaUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop',
       product: {
         id: '1',
-        name: 'Утренний кофе',
-        price: 350,
+        name: 'Модное платье',
+        price: 4500,
         brand: 'Fashion Brand',
       },
       author: {
