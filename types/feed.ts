@@ -25,19 +25,32 @@ export interface FeedItem {
 export interface Mall {
   id: string;
   name: string;
-  image: string;
+  images: any[]; // Поддержка URL и require()
   address: string;
-  schedule: string;
-  phone: string;
+  description: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  schemaUrl?: string;
+  websiteUrl?: string;
   promotions: string[];
+  phone: string;
+  schedule: string;
 }
 
 export interface Shop {
   id: string;
   name: string;
-  image: string;
-  logo: string;
+  images: any[]; // Поддержка URL и require()
+  logo: any; // Поддержка URL и require()
   addresses: string[];
+  phone: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  schemaUrl?: string;
   description: string;
   rating: number;
   reviewCount: number;

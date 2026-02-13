@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -21,6 +21,25 @@ export default function ShopsScreen() {
   const [selectedShop] = useState(shops[0]);
   const feedItems = getFeedItems();
   const products = getProducts().slice(0, 6);
+
+  const handleCall = (phone: string) => {
+    Linking.openURL(`tel:${phone}`);
+  };
+
+  const handleChat = (phone: string) => {
+    // Открыть WhatsApp
+    Linking.openURL(`whatsapp://send?phone=${phone}`);
+  };
+
+  const handleMap = (coords: { latitude: number; longitude: number }) => {
+    // Открыть карту (Google Maps или аналоги)
+    const url = `geo:${coords.latitude},${coords.longitude}?q=${coords.latitude},${coords.longitude}`;
+    Linking.openURL(url);
+  };
+
+  const handleSchema = (url?: string) => {
+    if (url) Linking.openURL(url);
+  };
 
   return (
     <SafeAreaView style={commonStyles.container} edges={['top']}>
@@ -50,47 +69,17 @@ export default function ShopsScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Shop Header */}
-        <View style={styles.shopHeader}>
-          <Image
-            source={{ uri: selectedShop.image }}
-            style={styles.shopCover}
-            contentFit="cover"
-            transition={200}
-          />
-          
-          <View style={styles.shopLogoContainer}>
-            <Image
-              source={{ uri: selectedShop.logo }}
-              style={styles.shopLogo}
-              contentFit="cover"
-              transition={200}
-            />
-          </View>
+        {/* Главный магазин */}
+        <ShopCard
+          shop={selectedShop}
+          onPress={() => { }}
+          onCallPress={() => handleCall(selectedShop.phone)}
+          onChatPress={() => handleChat(selectedShop.phone)}
+          onMapPress={() => handleMap(selectedShop.coordinates)}
+          onSchemaPress={() => handleSchema(selectedShop.schemaUrl)}
+        />
 
-          <View style={styles.shopInfo}>
-            <Text style={styles.shopName}>{selectedShop.name}</Text>
-            
-            <View style={styles.shopRating}>
-              <MaterialIcons name="star" size={18} color={colors.accent} />
-              <Text style={styles.shopRatingText}>{selectedShop.rating}</Text>
-              <Text style={styles.shopReviewCount}>({selectedShop.reviewCount})</Text>
-            </View>
-
-            <Text style={styles.shopDescription}>{selectedShop.description}</Text>
-
-            <View style={styles.shopAddresses}>
-              {selectedShop.addresses.map((address, index) => (
-                <View key={index} style={styles.addressRow}>
-                  <MaterialIcons name="location-on" size={16} color={colors.primary} />
-                  <Text style={styles.addressText}>{address}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        {/* Video Section */}
+        {/* Секция видео */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Видео от магазина</Text>
           <ScrollView
@@ -134,7 +123,7 @@ export default function ShopsScreen() {
           <View style={styles.productGrid}>
             {products.map(product => (
               <View key={product.id} style={styles.productItem}>
-                <ProductCard product={product} onPress={() => {}} />
+                <ProductCard product={product} onPress={() => { }} />
               </View>
             ))}
           </View>
@@ -144,7 +133,15 @@ export default function ShopsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Другие магазины</Text>
           {shops.slice(1).map(shop => (
-            <ShopCard key={shop.id} shop={shop} onPress={() => {}} />
+            <ShopCard
+              key={shop.id}
+              shop={shop}
+              onPress={() => { }}
+              onCallPress={() => handleCall(shop.phone)}
+              onChatPress={() => handleChat(shop.phone)}
+              onMapPress={() => handleMap(shop.coordinates)}
+              onSchemaPress={() => handleSchema(shop.schemaUrl)}
+            />
           ))}
         </View>
       </ScrollView>
@@ -181,67 +178,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: spacing.xl,
-  },
-  shopHeader: {
-    backgroundColor: colors.surface,
-    marginBottom: spacing.lg,
-    ...shadows.md,
-  },
-  shopCover: {
-    width: '100%',
-    height: 200,
-  },
-  shopLogoContainer: {
-    position: 'absolute',
-    top: 160,
-    left: spacing.lg,
-    width: 80,
-    height: 80,
-    borderRadius: borderRadius.lg,
-    borderWidth: 3,
-    borderColor: colors.surface,
-    overflow: 'hidden',
-    ...shadows.lg,
-  },
-  shopLogo: {
-    width: '100%',
-    height: '100%',
-  },
-  shopInfo: {
-    padding: spacing.lg,
-    paddingTop: spacing.xl + spacing.lg,
-  },
-  shopName: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
-    color: colors.text,
-    marginBottom: spacing.xs,
-  },
-  shopRating: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    marginBottom: spacing.sm,
-  },
-  shopRatingText: {
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.medium,
-    color: colors.text,
-  },
-  shopReviewCount: {
-    fontSize: typography.sizes.sm,
-    color: colors.textSecondary,
-  },
-  shopDescription: {
-    fontSize: typography.sizes.sm,
-    color: colors.textSecondary,
-    lineHeight: typography.sizes.sm * 1.5,
-    marginBottom: spacing.md,
-  },
-  shopAddresses: {
-    backgroundColor: colors.surfaceRed,
-    padding: spacing.md,
-    borderRadius: borderRadius.md,
   },
   addressRow: {
     flexDirection: 'row',

@@ -1,21 +1,46 @@
-/*
- * @Description: Mall screen
- */
-
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable, Dimensions, Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@/constants/theme';
 import { commonStyles } from '@/constants/styles';
-import { MallCard } from '@/components';
+import { MallCard, MallMap, MallMapRef } from '@/components';
 import { getMalls } from '@/services/feedService';
+import { Mall } from '@/types/feed';
+
+const { width } = Dimensions.get('window');
 
 export default function MallScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const malls = getMalls();
+  const mapRef = useRef<MallMapRef>(null);
+
+  // Center on Bishkek by default
+  const [region, setRegion] = useState({
+    latitude: 42.8746,
+    longitude: 74.5698,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  const handleMapPress = (mall: Mall) => {
+    mapRef.current?.animateToRegion({
+      latitude: mall.coordinates.latitude,
+      longitude: mall.coordinates.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    });
+  };
+
+  const handleShopsPress = (mall: Mall) => {
+    router.push('/shops');
+  };
+
+  const handleNewsPress = (mall: Mall) => {
+    router.push('/feed');
+  };
 
   return (
     <SafeAreaView style={commonStyles.container} edges={['top']}>
@@ -34,9 +59,6 @@ export default function MallScreen() {
           >
             <MaterialIcons name="shopping-cart" size={24} color={colors.text} />
           </Pressable>
-          <Pressable style={styles.iconButton}>
-            <MaterialIcons name="notifications-none" size={24} color={colors.text} />
-          </Pressable>
         </View>
       </View>
 
@@ -45,8 +67,24 @@ export default function MallScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
+        <View style={styles.mapContainer}>
+          <MallMap
+            ref={mapRef}
+            initialRegion={region}
+            malls={malls}
+          />
+        </View>
+
+        <Text style={styles.sectionTitle}>Список ТЦ</Text>
+
         {malls.map(mall => (
-          <MallCard key={mall.id} mall={mall} />
+          <MallCard
+            key={mall.id}
+            mall={mall}
+            onMapPress={() => handleMapPress(mall)}
+            onShopsPress={() => handleShopsPress(mall)}
+            onNewsPress={() => handleNewsPress(mall)}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -82,5 +120,19 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: spacing.md,
+  },
+  mapContainer: {
+    height: 250,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginBottom: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  sectionTitle: {
+    fontSize: typography.sizes.xl,
+    fontWeight: typography.weights.bold,
+    color: colors.text,
+    marginBottom: spacing.md,
   },
 });
