@@ -23,7 +23,7 @@ export default function FeedScreen() {
   }).current;
 
   const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 50,
+    itemVisiblePercentThreshold: 80,
   }).current;
 
   return (
@@ -53,8 +53,6 @@ export default function FeedScreen() {
         keyExtractor={item => item.id}
         pagingEnabled
         showsVerticalScrollIndicator={false}
-        snapToInterval={1}
-        snapToAlignment="start"
         decelerationRate="fast"
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}

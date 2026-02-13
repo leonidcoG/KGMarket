@@ -11,6 +11,8 @@ import { colors, spacing, typography, borderRadius } from '@/constants/theme';
 import { FeedItem } from '@/types/feed';
 import { useRouter } from 'expo-router';
 
+import { useIsFocused } from '@react-navigation/native';
+
 interface FeedVideoCardProps {
   item: FeedItem;
   isActive: boolean;
@@ -20,26 +22,27 @@ const { width, height } = Dimensions.get('window');
 
 export const FeedVideoCard: React.FC<FeedVideoCardProps> = ({ item, isActive }) => {
   const router = useRouter();
+  const isFocused = useIsFocused();
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(item.likes);
 
   const player = item.type === 'video' ? useVideoPlayer(item.mediaUrl, (player) => {
     player.loop = true;
     player.muted = false;
-    if (isActive) {
+    if (isActive && isFocused) {
       player.play();
     }
   }) : null;
 
   React.useEffect(() => {
     if (player) {
-      if (isActive) {
+      if (isActive && isFocused) {
         player.play();
       } else {
         player.pause();
       }
     }
-  }, [isActive, player]);
+  }, [isActive, isFocused, player]);
 
   const handleLike = () => {
     setIsLiked(!isLiked);

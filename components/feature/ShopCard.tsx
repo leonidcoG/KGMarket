@@ -2,7 +2,7 @@
  * @Description: Shop card component
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -12,30 +12,69 @@ import { Shop } from '@/types/feed';
 interface ShopCardProps {
   shop: Shop;
   onPress: () => void;
+  onCallPress: () => void;
+  onChatPress: () => void;
+  onMapPress: () => void;
+  onSchemaPress: () => void;
 }
 
-export const ShopCard: React.FC<ShopCardProps> = ({ shop, onPress }) => {
+export const ShopCard: React.FC<ShopCardProps> = ({
+  shop,
+  onPress,
+  onCallPress,
+  onChatPress,
+  onMapPress,
+  onSchemaPress
+}) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % shop.images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + shop.images.length) % shop.images.length);
+  };
+
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      <Image
-        source={{ uri: shop.image }}
-        style={styles.image}
-        contentFit="cover"
-        transition={200}
-      />
-      
+      <View style={styles.imageContainer}>
+        <Image
+          key={`shop-img-${currentImageIndex}`}
+          source={typeof shop.images[currentImageIndex] === 'string' ? { uri: shop.images[currentImageIndex] } : shop.images[currentImageIndex]}
+          style={styles.image}
+          contentFit="cover"
+        />
+
+        {shop.images.length > 1 && (
+          <>
+            <Pressable style={[styles.navButton, styles.leftButton]} onPress={prevImage}>
+              <MaterialIcons name="chevron-left" size={32} color={colors.surface} />
+            </Pressable>
+            <Pressable style={[styles.navButton, styles.rightButton]} onPress={nextImage}>
+              <MaterialIcons name="chevron-right" size={32} color={colors.surface} />
+            </Pressable>
+
+            <View style={styles.imageCounter}>
+              <Text style={styles.counterText}>
+                {currentImageIndex + 1} / {shop.images.length}
+              </Text>
+            </View>
+          </>
+        )}
+      </View>
+
       <View style={styles.logoContainer}>
         <Image
-          source={{ uri: shop.logo }}
+          source={typeof shop.logo === 'string' ? { uri: shop.logo } : shop.logo}
           style={styles.logo}
           contentFit="cover"
-          transition={200}
         />
       </View>
 
       <View style={styles.content}>
         <Text style={styles.name}>{shop.name}</Text>
-        
+
         <View style={styles.rating}>
           <MaterialIcons name="star" size={16} color={colors.accent} />
           <Text style={styles.ratingText}>{shop.rating}</Text>
@@ -64,6 +103,36 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop, onPress }) => {
             </View>
           ))}
         </View>
+
+        <View style={styles.actions}>
+          {/* Ряд 1: Позвонить и Чат */}
+          <View style={styles.actionRow}>
+            <Pressable style={[styles.button, styles.primaryButton]} onPress={onCallPress}>
+              <MaterialIcons name="call" size={20} color={colors.textOnPrimary} />
+              <Text style={styles.primaryButtonText}>Позвонить</Text>
+            </Pressable>
+
+            <Pressable style={[styles.button, styles.secondaryButton]} onPress={onChatPress}>
+              <MaterialIcons name="chat" size={20} color={colors.primary} />
+              <Text style={styles.secondaryButtonText}>Чат с продавцом</Text>
+            </Pressable>
+          </View>
+
+          {/* Ряд 2: На карте и Схема */}
+          <View style={styles.actionRow}>
+            <Pressable style={[styles.button, styles.outlineButton]} onPress={onMapPress}>
+              <MaterialIcons name="map" size={20} color={colors.text} />
+              <Text style={styles.outlineButtonText}>На карте</Text>
+            </Pressable>
+
+            {shop.schemaUrl && (
+              <Pressable style={[styles.button, styles.outlineButton]} onPress={onSchemaPress}>
+                <MaterialIcons name="grid-on" size={20} color={colors.text} />
+                <Text style={styles.outlineButtonText}>Схема ТЦ</Text>
+              </Pressable>
+            )}
+          </View>
+        </View>
       </View>
     </Pressable>
   );
@@ -75,11 +144,49 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.xl,
     overflow: 'hidden',
     marginBottom: spacing.lg,
-    ...shadows.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  imageContainer: {
+    position: 'relative',
+    width: '100%',
+    height: 180,
   },
   image: {
     width: '100%',
-    height: 180,
+    height: '100%',
+    backgroundColor: '#eee',
+  },
+  navButton: {
+    position: 'absolute',
+    top: '50%',
+    marginTop: -20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  leftButton: {
+    left: spacing.sm,
+  },
+  rightButton: {
+    right: spacing.sm,
+  },
+  imageCounter: {
+    position: 'absolute',
+    bottom: spacing.sm,
+    right: spacing.sm,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: borderRadius.sm,
+  },
+  counterText: {
+    color: colors.surface,
+    fontSize: 12,
+    fontWeight: 'bold',
   },
   logoContainer: {
     position: 'absolute',
@@ -96,6 +203,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: '100%',
+    backgroundColor: '#eee',
   },
   content: {
     padding: spacing.lg,
@@ -147,6 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceRed,
     padding: spacing.md,
     borderRadius: borderRadius.md,
+    marginBottom: spacing.lg,
   },
   addressTitle: {
     fontSize: typography.sizes.md,
@@ -164,5 +273,49 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.sm,
     color: colors.textSecondary,
     flex: 1,
+  },
+  actions: {
+    gap: spacing.sm,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  button: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+  },
+  secondaryButton: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  outlineButton: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  primaryButtonText: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+    color: colors.textOnPrimary,
+  },
+  secondaryButtonText: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+    color: colors.primary,
+  },
+  outlineButtonText: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.medium,
+    color: colors.text,
   },
 });
