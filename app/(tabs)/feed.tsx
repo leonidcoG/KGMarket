@@ -1,13 +1,10 @@
-/*
- * @Description: Feed screen with vertical video scrolling
- */
-
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, FlatList, ViewToken, Pressable } from 'react-native';
+import { View, StyleSheet, FlatList, ViewToken, Pressable, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, spacing } from '@/constants/theme';
+import { BlurView } from 'expo-blur';
+import { colors, spacing, borderRadius } from '@/constants/theme';
 import { FeedVideoCard } from '@/components';
 import { getFeedItems } from '@/services/feedService';
 
@@ -29,22 +26,36 @@ export default function FeedScreen() {
   return (
     <SafeAreaView style={styles.container} edges={[]}>
       <View style={styles.topIcons}>
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => router.push('/favorites')}
-        >
-          <MaterialIcons name="favorite-border" size={28} color="#fff" />
-        </Pressable>
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => router.push('/cart')}
-        >
-          <MaterialIcons name="shopping-cart" size={28} color="#fff" />
-        </Pressable>
-        <Pressable style={styles.iconButton}>
-          <MaterialIcons name="notifications-none" size={28} color="#fff" />
-        </Pressable>
+        <BlurView intensity={30} tint="dark" style={styles.blurWrapper}>
+          <Pressable
+            style={styles.iconButton}
+            onPress={() => router.push('/favorites')}
+          >
+            <MaterialIcons name="favorite-border" size={26} color="#FFF" />
+          </Pressable>
+
+          <View style={styles.divider} />
+
+          <Pressable
+            style={styles.iconButton}
+            onPress={() => router.push('/cart')}
+          >
+            <View style={styles.cartBadgeContainer}>
+              <MaterialIcons name="shopping-bag" size={26} color="#FFF" />
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>3</Text>
+              </View>
+            </View>
+          </Pressable>
+
+          <View style={styles.divider} />
+
+          <Pressable style={styles.iconButton}>
+            <MaterialIcons name="notifications-none" size={26} color="#FFF" />
+          </Pressable>
+        </BlurView>
       </View>
+
       <FlatList
         data={feedItems}
         renderItem={({ item, index }) => (
@@ -56,6 +67,7 @@ export default function FeedScreen() {
         decelerationRate="fast"
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
+        removeClippedSubviews={false}
       />
     </SafeAreaView>
   );
@@ -64,19 +76,53 @@ export default function FeedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: '#000',
   },
   topIcons: {
     position: 'absolute',
-    top: spacing.xl,
+    top: 60,
     right: spacing.md,
     zIndex: 10,
+  },
+  blurWrapper: {
     flexDirection: 'row',
-    gap: spacing.sm,
+    alignItems: 'center',
+    borderRadius: borderRadius.xl,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
   },
   iconButton: {
-    padding: spacing.xs,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 20,
+    padding: spacing.sm,
+  },
+  divider: {
+    width: 1,
+    height: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    marginHorizontal: spacing.xs,
+  },
+  cartBadgeContainer: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: colors.primary,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#000',
+  },
+  badgeText: {
+    color: '#FFF',
+    fontSize: 9,
+    fontWeight: 'bold',
   },
 });

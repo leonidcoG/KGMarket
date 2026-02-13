@@ -1,13 +1,11 @@
-/*
- * @Description: Home screen with feed
- */
-
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, spacing, typography, borderRadius } from '@/constants/theme';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, spacing, typography, borderRadius, shadows, gradients } from '@/constants/theme';
 import { commonStyles } from '@/constants/styles';
 import { SearchBar, CategoryChip, HeroBanner, ProductCard, FilterModal, Filters } from '@/components';
 import { getBanners, getCategories, getProducts, searchProducts } from '@/services/productService';
@@ -36,100 +34,135 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={commonStyles.container} edges={['top']}>
-      <View style={[styles.header, { paddingTop: Math.max(8, insets.top) }]}>
-        <View style={styles.headerTop}>
-          <Text style={styles.logo}>KG Market</Text>
-          <View style={styles.headerIcons}>
-            <Pressable
-              style={styles.iconButton}
-              onPress={() => router.push('/favorites')}
-            >
-              <MaterialIcons name="favorite-border" size={24} color={colors.text} />
-            </Pressable>
-            <Pressable
-              style={styles.iconButton}
-              onPress={() => router.push('/cart')}
-            >
-              <MaterialIcons name="shopping-cart" size={24} color={colors.text} />
-            </Pressable>
-            <Pressable style={styles.iconButton}>
-              <MaterialIcons name="notifications-none" size={24} color={colors.text} />
-            </Pressable>
-          </View>
-        </View>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onFilterPress={() => setFilterModalVisible(true)}
-        />
-      </View>
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#FFFFFF', '#F8F9FA', '#F1F3F5']}
+        style={StyleSheet.absoluteFill}
+      />
 
-      <ScrollView
-        style={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.categorySection}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryList}
-          >
-            {categories.map(cat => (
-              <CategoryChip
-                key={cat.id}
-                icon={cat.icon as any}
-                label={cat.name}
-                isSelected={selectedCategory === cat.name}
-                onPress={() => handleCategoryPress(cat.name)}
-              />
-            ))}
-          </ScrollView>
-        </View>
-
-        {banners.map(banner => (
-          <HeroBanner
-            key={banner.id}
-            banner={banner}
-            onPress={() => {}}
-          />
-        ))}
-
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Популярные товары</Text>
-            <Pressable>
-              <Text style={styles.seeAll}>Все</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.productGrid}>
-            {products.map(product => (
-              <View key={product.id} style={styles.productItem}>
-                <ProductCard
-                  product={product}
-                  onPress={() => router.push(`/product/${product.id}`)}
+      <SafeAreaView style={commonStyles.container} edges={['top']}>
+        <View style={styles.headerWrapper}>
+          <BlurView intensity={80} style={styles.headerBlur}>
+            <View style={[styles.header, { paddingTop: Math.max(8, insets.top) }]}>
+              <View style={styles.headerTop}>
+                <View>
+                  <Text style={styles.greeting}>Добро пожаловать,</Text>
+                  <Text style={styles.logo}>KG Market</Text>
+                </View>
+                <View style={styles.headerIcons}>
+                  <Pressable
+                    style={styles.iconButton}
+                    onPress={() => router.push('/favorites')}
+                  >
+                    <MaterialIcons name="favorite-border" size={26} color={colors.text} />
+                  </Pressable>
+                  <Pressable
+                    style={styles.iconButton}
+                    onPress={() => router.push('/cart')}
+                  >
+                    <View style={styles.cartBadgeContainer}>
+                      <MaterialIcons name="shopping-bag" size={26} color={colors.text} />
+                      <View style={styles.badge}>
+                        <Text style={styles.badgeText}>3</Text>
+                      </View>
+                    </View>
+                  </Pressable>
+                </View>
+              </View>
+              <View style={styles.searchWrapper}>
+                <SearchBar
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  onFilterPress={() => setFilterModalVisible(true)}
                 />
               </View>
+            </View>
+          </BlurView>
+        </View>
+
+        <ScrollView
+          style={styles.content}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          <View style={styles.categorySection}>
+            <Text style={styles.sectionTitleSmall}>Категории</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoryList}
+            >
+              {categories.map(cat => (
+                <CategoryChip
+                  key={cat.id}
+                  icon={cat.icon as any}
+                  label={cat.name}
+                  isSelected={selectedCategory === cat.name}
+                  onPress={() => handleCategoryPress(cat.name)}
+                />
+              ))}
+            </ScrollView>
+          </View>
+
+          <View style={styles.bannerSection}>
+            {banners.map(banner => (
+              <HeroBanner
+                key={banner.id}
+                banner={banner}
+                onPress={() => { }}
+              />
             ))}
           </View>
-        </View>
-      </ScrollView>
 
-      <FilterModal
-        visible={filterModalVisible}
-        onClose={() => setFilterModalVisible(false)}
-        onApply={handleApplyFilters}
-      />
-    </SafeAreaView>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View>
+                <Text style={styles.sectionTitle}>Вам понравится</Text>
+                <Text style={styles.sectionSubtitle}>Лучшие предложения сегодня</Text>
+              </View>
+              <Pressable style={styles.seeAllButton}>
+                <Text style={styles.seeAllText}>Все</Text>
+                <MaterialIcons name="chevron-right" size={20} color={colors.primary} />
+              </Pressable>
+            </View>
+
+            <View style={styles.productGrid}>
+              {products.map(product => (
+                <View key={product.id} style={styles.productItem}>
+                  <ProductCard
+                    product={product}
+                    onPress={() => router.push(`/product/${product.id}`)}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+
+        <FilterModal
+          visible={filterModalVisible}
+          onClose={() => setFilterModalVisible(false)}
+          onApply={handleApplyFilters}
+        />
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    backgroundColor: colors.surface,
+  container: {
+    flex: 1,
+  },
+  headerWrapper: {
+    zIndex: 10,
+    backgroundColor: 'transparent',
+  },
+  headerBlur: {
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  header: {
+    paddingBottom: spacing.sm,
   },
   headerTop: {
     flexDirection: 'row',
@@ -138,18 +171,49 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
   },
+  greeting: {
+    fontSize: typography.sizes.xs,
+    color: colors.textLight,
+    fontWeight: typography.weights.medium,
+    marginBottom: 2,
+  },
   logo: {
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
-    color: colors.primary,
+    color: colors.text,
+    letterSpacing: -0.5,
   },
   headerIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: spacing.md,
   },
   iconButton: {
     padding: spacing.xs,
+  },
+  cartBadgeContainer: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: colors.primary,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.surface,
+  },
+  badgeText: {
+    color: colors.surface,
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  searchWrapper: {
+    paddingHorizontal: spacing.sm,
   },
   content: {
     flex: 1,
@@ -157,9 +221,21 @@ const styles = StyleSheet.create({
   categorySection: {
     paddingVertical: spacing.md,
   },
+  sectionTitleSmall: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+    color: colors.textSecondary,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
   categoryList: {
     paddingHorizontal: spacing.md,
     gap: spacing.sm,
+  },
+  bannerSection: {
+    paddingVertical: spacing.xs,
   },
   section: {
     paddingVertical: spacing.md,
@@ -167,19 +243,34 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
   },
   sectionTitle: {
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     color: colors.text,
+    letterSpacing: -0.5,
   },
-  seeAll: {
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.medium,
+  sectionSubtitle: {
+    fontSize: typography.sizes.sm,
+    color: colors.textLight,
+    marginTop: 2,
+  },
+  seeAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surfaceSecondary,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+  },
+  seeAllText: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.semibold,
     color: colors.primary,
+    marginRight: 2,
   },
   productGrid: {
     flexDirection: 'row',

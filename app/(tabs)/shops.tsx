@@ -1,13 +1,11 @@
-/*
- * @Description: Shops screen
- */
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import { colors, spacing, typography, borderRadius, shadows } from '@/constants/theme';
 import { commonStyles } from '@/constants/styles';
 import { ShopCard, ProductCard } from '@/components';
@@ -27,12 +25,10 @@ export default function ShopsScreen() {
   };
 
   const handleChat = (phone: string) => {
-    // Открыть WhatsApp
     Linking.openURL(`whatsapp://send?phone=${phone}`);
   };
 
   const handleMap = (coords: { latitude: number; longitude: number }) => {
-    // Открыть карту (Google Maps или аналоги)
     const url = `geo:${coords.latitude},${coords.longitude}?q=${coords.latitude},${coords.longitude}`;
     Linking.openURL(url);
   };
@@ -42,133 +38,178 @@ export default function ShopsScreen() {
   };
 
   return (
-    <SafeAreaView style={commonStyles.container} edges={['top']}>
-      <View style={[styles.header, { paddingTop: Math.max(8, insets.top) }]}>
-        <Text style={styles.title}>Магазины</Text>
-        <View style={styles.headerIcons}>
-          <Pressable
-            style={styles.iconButton}
-            onPress={() => router.push('/favorites')}
-          >
-            <MaterialIcons name="favorite-border" size={24} color={colors.text} />
-          </Pressable>
-          <Pressable
-            style={styles.iconButton}
-            onPress={() => router.push('/cart')}
-          >
-            <MaterialIcons name="shopping-cart" size={24} color={colors.text} />
-          </Pressable>
-          <Pressable style={styles.iconButton}>
-            <MaterialIcons name="notifications-none" size={24} color={colors.text} />
-          </Pressable>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#FFFFFF', '#F8F9FA', '#F1F3F5']}
+        style={StyleSheet.absoluteFill}
+      />
 
-      <ScrollView
-        style={styles.content}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {/* Главный магазин */}
-        <ShopCard
-          shop={selectedShop}
-          onPress={() => { }}
-          onCallPress={() => handleCall(selectedShop.phone)}
-          onChatPress={() => handleChat(selectedShop.phone)}
-          onMapPress={() => handleMap(selectedShop.coordinates)}
-          onSchemaPress={() => handleSchema(selectedShop.schemaUrl)}
-        />
-
-        {/* Секция видео */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Видео от магазина</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.videoList}
-          >
-            {feedItems.map(item => (
-              <Pressable key={item.id} style={styles.videoItem}>
-                <Image
-                  source={{ uri: item.type === 'video' ? item.thumbnail : item.mediaUrl }}
-                  style={styles.videoThumbnail}
-                  contentFit="cover"
-                  transition={200}
-                />
-                {item.type === 'video' && (
-                  <View style={styles.playButton}>
-                    <MaterialIcons name="play-arrow" size={32} color={colors.textOnPrimary} />
-                  </View>
-                )}
-                <View style={styles.videoStats}>
-                  <View style={styles.videoStat}>
-                    <MaterialIcons name="favorite" size={14} color={colors.textOnPrimary} />
-                    <Text style={styles.videoStatText}>{item.likes}</Text>
-                  </View>
-                </View>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
-
-        {/* Products Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Товары магазина</Text>
-            <Pressable>
-              <Text style={styles.seeAll}>Все товары</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.productGrid}>
-            {products.map(product => (
-              <View key={product.id} style={styles.productItem}>
-                <ProductCard product={product} onPress={() => { }} />
+      <SafeAreaView style={commonStyles.container} edges={['top']}>
+        <View style={styles.headerWrapper}>
+          <BlurView intensity={80} style={styles.headerBlur}>
+            <View style={[styles.header, { paddingTop: Math.max(8, insets.top) }]}>
+              <View>
+                <Text style={styles.subtitleHeader}>Модные бутики</Text>
+                <Text style={styles.title}>Магазины</Text>
               </View>
-            ))}
-          </View>
+              <View style={styles.headerIcons}>
+                <Pressable
+                  style={styles.iconButton}
+                  onPress={() => router.push('/favorites')}
+                >
+                  <MaterialIcons name="favorite-border" size={26} color={colors.text} />
+                </Pressable>
+                <Pressable
+                  style={styles.iconButton}
+                  onPress={() => router.push('/cart')}
+                >
+                  <MaterialIcons name="shopping-bag" size={26} color={colors.text} />
+                </Pressable>
+              </View>
+            </View>
+          </BlurView>
         </View>
 
-        {/* Other Shops */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Другие магазины</Text>
-          {shops.slice(1).map(shop => (
+        <ScrollView
+          style={styles.content}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Главный магазин */}
+          <View style={styles.featuredShop}>
+            <Text style={styles.sectionTitleSmall}>Рекомендуемый выбор</Text>
             <ShopCard
-              key={shop.id}
-              shop={shop}
+              shop={selectedShop}
               onPress={() => { }}
-              onCallPress={() => handleCall(shop.phone)}
-              onChatPress={() => handleChat(shop.phone)}
-              onMapPress={() => handleMap(shop.coordinates)}
-              onSchemaPress={() => handleSchema(shop.schemaUrl)}
+              onCallPress={() => handleCall(selectedShop.phone)}
+              onChatPress={() => handleChat(selectedShop.phone)}
+              onMapPress={() => handleMap(selectedShop.coordinates)}
+              onSchemaPress={() => handleSchema(selectedShop.schemaUrl)}
             />
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          </View>
+
+          {/* Секция видео */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View>
+                <Text style={styles.sectionTitle}>Вдохновение</Text>
+                <Text style={styles.sectionSubtitleText}>Видео от наших магазинов</Text>
+              </View>
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.videoList}
+            >
+              {feedItems.map(item => (
+                <Pressable key={item.id} style={styles.videoItem}>
+                  <Image
+                    source={{ uri: item.type === 'video' ? item.thumbnail : item.mediaUrl }}
+                    style={styles.videoThumbnail}
+                    contentFit="cover"
+                    transition={400}
+                  />
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.6)']}
+                    style={styles.videoOverlay}
+                  />
+                  {item.type === 'video' && (
+                    <View style={styles.playButton}>
+                      <MaterialIcons name="play-arrow" size={28} color="#FFF" />
+                    </View>
+                  )}
+                  <View style={styles.videoStats}>
+                    <View style={styles.videoStat}>
+                      <MaterialIcons name="favorite" size={12} color="#FFF" />
+                      <Text style={styles.videoStatText}>{item.likes}</Text>
+                    </View>
+                  </View>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/* Products Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View>
+                <Text style={styles.sectionTitle}>Новые коллекции</Text>
+                <Text style={styles.sectionSubtitleText}>Последние поступления</Text>
+              </View>
+              <Pressable style={styles.seeAllButton}>
+                <Text style={styles.seeAllText}>Все</Text>
+                <MaterialIcons name="chevron-right" size={20} color={colors.primary} />
+              </Pressable>
+            </View>
+
+            <View style={styles.productGrid}>
+              {products.map(product => (
+                <View key={product.id} style={styles.productItem}>
+                  <ProductCard product={product} onPress={() => { }} />
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Other Shops */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Другие магазины</Text>
+            <View style={styles.otherShopsList}>
+              {shops.slice(1).map(shop => (
+                <View key={shop.id} style={styles.otherShopItem}>
+                  <ShopCard
+                    shop={shop}
+                    onPress={() => { }}
+                    onCallPress={() => handleCall(shop.phone)}
+                    onChatPress={() => handleChat(shop.phone)}
+                    onMapPress={() => handleMap(shop.coordinates)}
+                    onSchemaPress={() => handleSchema(shop.schemaUrl)}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  headerWrapper: {
+    zIndex: 10,
+    backgroundColor: 'transparent',
+  },
+  headerBlur: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+  },
+  subtitleHeader: {
+    fontSize: typography.sizes.xs,
+    color: colors.textLight,
+    fontWeight: typography.weights.medium,
+    marginBottom: 2,
   },
   title: {
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
     color: colors.text,
+    letterSpacing: -0.5,
   },
   headerIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: spacing.md,
   },
   iconButton: {
     padding: spacing.xs,
@@ -179,16 +220,18 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: spacing.xl,
   },
-  addressRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: spacing.xs,
-    marginBottom: spacing.xs,
+  featuredShop: {
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.lg,
   },
-  addressText: {
+  sectionTitleSmall: {
     fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
     color: colors.textSecondary,
-    flex: 1,
+    marginBottom: spacing.sm,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   section: {
     marginBottom: spacing.lg,
@@ -196,7 +239,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingHorizontal: spacing.md,
     marginBottom: spacing.md,
   },
@@ -204,29 +247,50 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     color: colors.text,
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
+    letterSpacing: -0.5,
   },
-  seeAll: {
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.medium,
+  sectionSubtitleText: {
+    fontSize: typography.sizes.sm,
+    color: colors.textLight,
+    marginTop: 2,
+  },
+  seeAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surfaceSecondary,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+  },
+  seeAllText: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.semibold,
     color: colors.primary,
+    marginRight: 2,
   },
   videoList: {
     paddingHorizontal: spacing.md,
-    gap: spacing.sm,
+    gap: spacing.md,
   },
   videoItem: {
-    width: 140,
-    height: 220,
+    width: 160,
+    height: 240,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
     position: 'relative',
     ...shadows.md,
+    backgroundColor: colors.surfaceSecondary,
   },
   videoThumbnail: {
     width: '100%',
     height: '100%',
+  },
+  videoOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '50%',
   },
   playButton: {
     position: 'absolute',
@@ -236,28 +300,26 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: borderRadius.full,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
   },
   videoStats: {
     position: 'absolute',
     bottom: spacing.sm,
     left: spacing.sm,
-    right: spacing.sm,
   },
   videoStat: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: 4,
   },
   videoStatText: {
     fontSize: typography.sizes.xs,
-    fontWeight: typography.weights.semibold,
-    color: colors.textOnPrimary,
-    textShadowColor: 'rgba(0,0,0,0.8)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    fontWeight: typography.weights.bold,
+    color: '#FFF',
   },
   productGrid: {
     flexDirection: 'row',
@@ -267,5 +329,11 @@ const styles = StyleSheet.create({
   productItem: {
     width: '50%',
     padding: spacing.sm,
+  },
+  otherShopsList: {
+    paddingHorizontal: spacing.md,
+  },
+  otherShopItem: {
+    marginBottom: spacing.md,
   },
 });

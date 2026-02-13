@@ -2,49 +2,63 @@
  * @Description: Theme constants for Kyrgyz marketplace
  */
 
-// Kyrgyz flag-inspired color palette
+// Kyrgyz flag-inspired and Premium color palette
 export const colors = {
   // Primary - Crimson red from Kyrgyz flag
   primary: '#DC143C',
   primaryDark: '#B01030',
   primaryLight: '#FF4D6A',
-  
+
   // Accent - Golden yellow from Kyrgyz sun
   accent: '#FFD700',
   accentDark: '#E5C100',
   accentLight: '#FFED4E',
-  
+
+  // Premium Palette
+  gold: '#D4AF37',
+  champagne: '#F7E7CE',
+  graphite: '#1C1C1C',
+  charcoal: '#36454F',
+  platinum: '#E5E4E2',
+
   // Backgrounds
   background: '#FFFFFF',
-  backgroundSecondary: '#FFF5F5',
-  backgroundDark: '#1A0000',
-  
+  backgroundSecondary: '#F8F9FA',
+  backgroundDark: '#121212',
+
   // Surface
   surface: '#FFFFFF',
-  surfaceRed: '#FFF0F0',
+  surfaceSecondary: '#F1F3F5',
   surfaceGold: '#FFFAF0',
-  
+
   // Text
-  text: '#1A1A1A',
-  textSecondary: '#666666',
-  textLight: '#999999',
+  text: '#1C1C1C',
+  textSecondary: '#4A4A4A',
+  textLight: '#8E8E93',
   textOnPrimary: '#FFFFFF',
-  textOnAccent: '#1A0000',
-  
+  textOnAccent: '#1C1C1C',
+
   // Status
-  success: '#10B981',
-  error: '#EF4444',
-  warning: '#F59E0B',
-  info: '#3B82F6',
-  
+  success: '#34C759',
+  error: '#FF3B30',
+  warning: '#FF9500',
+  info: '#007AFF',
+
   // Border & divider
-  border: '#E5E5E5',
-  borderLight: '#F5F5F5',
-  divider: '#EEEEEE',
-  
+  border: '#E9ECEF',
+  borderLight: '#F1F3F5',
+  divider: '#F1F3F5',
+
   // Shadow
-  shadow: 'rgba(220, 20, 60, 0.15)',
-  shadowDark: 'rgba(0, 0, 0, 0.1)',
+  shadow: 'rgba(0, 0, 0, 0.08)',
+  shadowDark: 'rgba(0, 0, 0, 0.12)',
+};
+
+export const gradients = {
+  premium: ['#1C1C1C', '#36454F'],
+  gold: ['#D4AF37', '#F7E7CE'],
+  soft: ['#FFFFFF', '#F8F9FA'],
+  red: ['#DC143C', '#FF4D6A'],
 };
 
 export const spacing = {
@@ -80,34 +94,35 @@ export const typography = {
 };
 
 export const borderRadius = {
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
-  xxl: 24,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
   full: 999,
 };
 
 export const shadows = {
   sm: {
-    shadowColor: colors.shadowDark,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
     elevation: 2,
   },
   md: {
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
   },
   lg: {
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
   },
 };
