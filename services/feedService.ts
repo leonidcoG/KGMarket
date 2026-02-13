@@ -8,8 +8,8 @@ export const getFeedItems = (): FeedItem[] => {
   return [
     {
       id: '1',
-      type: 'video',
-      mediaUrl: require('@/assets/coffe.mp4'),
+      type: 'image',
+      mediaUrl: 'https://i.pinimg.com/736x/33/c7/bf/33c7bf073f11851dd249e904fb7cbd38.jpg',
       thumbnail: 'https://i.pinimg.com/736x/33/c7/bf/33c7bf073f11851dd249e904fb7cbd38.jpg',
       product: {
         id: '1',
