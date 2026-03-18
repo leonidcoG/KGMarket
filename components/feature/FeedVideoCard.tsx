@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Dimensions, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -129,9 +129,10 @@ export const FeedVideoCard: React.FC<FeedVideoCardProps> = ({ item, isActive }) 
 
 const styles = StyleSheet.create({
   container: {
-    width,
-    height,
+    width: '100%',
+    height: Platform.OS === 'web' ? '100%' : Dimensions.get('window').height,
     backgroundColor: '#000',
+    overflow: 'hidden',
   },
   media: {
     width: '100%',

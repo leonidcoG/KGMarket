@@ -8,8 +8,8 @@ export const getFeedItems = (): FeedItem[] => {
   return [
     {
       id: '1',
-      type: 'image',
-      mediaUrl: 'https://i.pinimg.com/736x/33/c7/bf/33c7bf073f11851dd249e904fb7cbd38.jpg',
+      type: 'video',
+      mediaUrl: '/mvp1/coffe.mp4',
       thumbnail: 'https://i.pinimg.com/736x/33/c7/bf/33c7bf073f11851dd249e904fb7cbd38.jpg',
       product: {
         id: '1',
@@ -27,8 +27,8 @@ export const getFeedItems = (): FeedItem[] => {
     },
     {
       id: '2',
-      type: 'image',
-      mediaUrl: 'https://ya-modnaya.ru/_pu/6/90214064.jpg',
+      type: 'video',
+      mediaUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       thumbnail: 'https://ya-modnaya.ru/_pu/6/90214064.jpg',
       product: {
         id: '2',
